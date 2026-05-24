@@ -1,0 +1,19 @@
+# Kaggle API key (VERY IMPORTANT)
+kaggle.json
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment files
+.env
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+
+# Model files (optional if you don’t want to upload)
+*.pkl
+*.joblib
