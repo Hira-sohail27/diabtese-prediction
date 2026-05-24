@@ -80,19 +80,6 @@ The dataset lives on Kaggle. You need a free API key to download it.
 
 ### ✅ STEP 5 — Save Your API Key
 
-Run this script in the VSCode terminal:
-```bash
-python setup_kaggle.py
-```
-
-It will ask for your username and key. Paste them in.
-
-```
-Enter your Kaggle USERNAME:  yourname
-Enter your Kaggle API KEY :  abc123def456...
-`.env` saved successfully
-```
-
 This saves your key to a local `.env` file in the project folder.
 The backend reads that file and also creates `~/.kaggle/kaggle.json`
 automatically when needed.
