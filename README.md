@@ -1,49 +1,41 @@
-# 🏥 Diabetes Prediction — Random Forest Project
+#  Diabetes Prediction — Random Forest Project
 
 ---
 
-## 📁 Project Files
+##  Project Files
 
 ```
 diabetes_project/
-│
-├── backend.py          ← ML brain: download data, train model, evaluate, plot
-├── app.py              ← Streamlit UI  (coming next!)
-├── setup_kaggle.py     ← Run ONCE to save your Kaggle API key in .env
-├── requirements.txt    ← All Python libraries needed
-├── .env.example        ← Example env file for Kaggle credentials
-└── README.md           ← This guide
+ backend.py          ← ML brain: download data, train model, evaluate, plot
+ app.py              ← Streamlit UI  (coming next!)
+ setup_kaggle.py     ← Run ONCE to save your Kaggle API key in .env
+ requirements.txt    ← All Python libraries needed
+ .env.example        ← Example env file for Kaggle credentials
+ README.md           ← This guide
 ```
 
 ---
-
-## 🚀 Getting Started (Do These Steps IN ORDER)
-
+##  Getting Started (Do These Steps IN ORDER)
 ---
-
-### ✅ STEP 1 — Install Python & VSCode
-
+###  STEP 1 — Install Python & VSCode
 **Python:**
 1. Download from https://python.org/downloads
-2. During install → ✅ check **"Add Python to PATH"**
+2. During install →  check **"Add Python to PATH"**
 
 **VSCode:**
 1. Download from https://code.visualstudio.com
 2. Install the **Python** extension (by Microsoft) from the Extensions panel
 
 ---
-
-### ✅ STEP 2 — Open the Project in VSCode
+###  STEP 2 — Open the Project in VSCode
 
 1. File → **Open Folder**
 2. Select the `diabetes_project` folder
-3. You see `backend.py`, `app.py`, `requirements.txt` in the sidebar ✅
-
+3. You see `backend.py`, `app.py`, `requirements.txt` in the sidebar 
 Open the terminal: press **Ctrl + `** (backtick key, top-left of keyboard)
 
 ---
-
-### ✅ STEP 3 — Install Libraries
+###  STEP 3 — Install Libraries
 
 ## create the virtual environment
 python3.12 -m venv venv
@@ -59,7 +51,7 @@ Wait for the green "Successfully installed…" message. ✅
 
 ---
 
-### ✅ STEP 4 — Get Your Kaggle API Key
+###  STEP 4 — Get Your Kaggle API Key
 
 The dataset lives on Kaggle. You need a free API key to download it.
 
@@ -78,7 +70,7 @@ The dataset lives on Kaggle. You need a free API key to download it.
 
 ---
 
-### ✅ STEP 5 — Save Your API Key
+###  STEP 5 — Save Your API Key
 
 This saves your key to a local `.env` file in the project folder.
 The backend reads that file and also creates `~/.kaggle/kaggle.json`
@@ -86,7 +78,7 @@ automatically when needed.
 
 ---
 
-### ✅ STEP 6 — Train and Save the Model Once
+###  STEP 6 — Train and Save the Model Once
 
 ```bash
 python backend.py
@@ -96,8 +88,8 @@ You should see:
 
 ```
 [STEP 1]  Download dataset from Kaggle
-✅ Dataset folder: ~/.cache/kagglehub/...
-📄 CSV file: .../diabetes_prediction_dataset.csv
+ Dataset folder: ~/.cache/kagglehub/...
+ CSV file: .../diabetes_prediction_dataset.csv
 
 [STEP 2]  Load CSV into DataFrame
    gender  age  ...  diabetes
@@ -118,14 +110,14 @@ You should see:
    Train Accuracy : 99.2%
    ROC-AUC Score  : 98.4%
 
-✅  ALL STEPS PASSED — backend.py works correctly!
-💾  Model saved to models/diabetes_model.joblib
-👉  Now run:  streamlit run app.py
+  ALL STEPS PASSED — backend.py works correctly!
+  Model saved to models/diabetes_model.joblib
+  Now run:  streamlit run app.py
 ```
 
 ---
 
-### ✅ STEP 7 — Run the Full App
+###  STEP 7 — Run the Full App
 
 ```bash
 streamlit run app.py
@@ -138,7 +130,7 @@ for every query. If the model file is missing, it will train once and save it.
 
 ---
 
-## 📊 Dataset Details
+##  Dataset Details
 
 | Column | Type | Meaning |
 |--------|------|---------|
@@ -154,7 +146,7 @@ for every query. If the model file is missing, it will train once and save it.
 
 ---
 
-## ❓ Common Problems & Fixes
+##  Common Problems & Fixes
 
 | Problem | Fix |
 |---------|-----|
@@ -166,7 +158,7 @@ for every query. If the model file is missing, it will train once and save it.
 
 ---
 
-## 🧪 Experiments for Students
+##  Experiments for Students
 
 | Experiment | What to change | What to observe |
 |------------|---------------|-----------------|

@@ -1,30 +1,24 @@
-# ============================================================
-# app.py  —  STREAMLIT FRONTEND FOR DIABETES PREDICTION
-# ============================================================
-
+# importing necessary libraries
 import streamlit as st
 import pandas as pd
-
+# importing model loading and training functions from backend.py    
 from backend import (
     MODEL_PATH,
     load_saved_model,
     train_and_save_model,
 )
 
-# ============================================================
-# PAGE CONFIG
-# ============================================================
 
+# Set Streamlit page configuration for title, icon, and layout
 st.set_page_config(
     page_title="Diabetes Prediction System",
     page_icon="🩺",
     layout="centered",
 )
 
-# ============================================================
-# CUSTOM DARK THEME CSS
-# ============================================================
 
+
+# Inject custom CSS to create a dark theme and style the app components
 st.markdown("""
 <style>
 
@@ -87,26 +81,20 @@ h1, h2, h3, h4, h5, h6, p, label, div {
 </style>
 """, unsafe_allow_html=True)
 
-# ============================================================
-# TITLE
-# ============================================================
 
+# Display the title and description of the app using markdown with custom styling
 st.markdown("""
 <h1 style='text-align:center;'>
-🩺 Diabetes Prediction System
+Diabetes Prediction System
 </h1>
 """, unsafe_allow_html=True)
-
+# short description below the title
 st.markdown("""
 <p style='text-align:center; font-size:18px; color:#cccccc;'>
 Enter patient health information to predict diabetes risk.
 </p>
 """, unsafe_allow_html=True)
-
-# ============================================================
 # LOAD SAVED MODEL
-# ============================================================
-
 @st.cache_resource
 def get_model():
     if MODEL_PATH.exists():
@@ -126,9 +114,8 @@ except Exception as exc:
     st.exception(exc)
     st.stop()
 
-# ============================================================
 # INPUT SECTION
-# ============================================================
+
 
 st.markdown("## 📋 Patient Information")
 
@@ -186,9 +173,8 @@ with col2:
         [0, 1]
     )
 
-# ============================================================
-# ENCODING
-# ============================================================
+
+# ENCODING CATEGORICAL VARIABLES
 
 gender_encoded = 0 if gender == "Female" else 1
 
@@ -203,11 +189,10 @@ smoking_mapping = {
 
 smoking_encoded = smoking_mapping[smoking]
 
-# ============================================================
 # PREDICT BUTTON
-# ============================================================
 
-if st.button("🔍 Predict Diabetes Risk"):
+
+if st.button(" Predict Diabetes Risk"):
 
     input_data = pd.DataFrame([{
         "age": age,
@@ -230,7 +215,7 @@ if st.button("🔍 Predict Diabetes Risk"):
 
         st.markdown(f"""
         <div class="prediction-box danger-box">
-            🚨 High Risk of Diabetes<br><br>
+             High Risk of Diabetes<br><br>
             Probability: {probability:.2f}%
         </div>
         """, unsafe_allow_html=True)
@@ -239,16 +224,16 @@ if st.button("🔍 Predict Diabetes Risk"):
 
         st.markdown(f"""
         <div class="prediction-box success-box">
-            ✅ Low Risk of Diabetes<br><br>
+             Low Risk of Diabetes<br><br>
             Probability: {probability:.2f}%
         </div>
         """, unsafe_allow_html=True)
 
-    # ========================================================
-    # METRICS
-    # ========================================================
 
-    st.markdown("## 📈 Health Metrics")
+    # METRICS
+    
+
+    st.markdown("##  Health Metrics")
 
     m1, m2, m3, m4 = st.columns(4)
 
@@ -284,16 +269,16 @@ if st.button("🔍 Predict Diabetes Risk"):
         </div>
         """, unsafe_allow_html=True)
 
-# ============================================================
+
 # FOOTER
-# ============================================================
+
 
 st.markdown("---")
 
 st.markdown("""
 <div style='text-align:center; color:#aaaaaa;'>
 
-Built with ❤️ using Streamlit + Random Forest Machine Learning
+Built with  using Streamlit + Random Forest Machine Learning
 
 </div>
 """, unsafe_allow_html=True)

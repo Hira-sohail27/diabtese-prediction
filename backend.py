@@ -1,11 +1,11 @@
-# ============================================================
-# backend.py  —  THE BRAIN OF THE DIABETES PREDICTION PROJECT 🧠
-# ============================================================
+
+# backend.py  —  THE BRAIN OF THE DIABETES PREDICTION PROJECT 
+
 #
-# 📌 HOW TO RUN THIS FILE:
+#  HOW TO RUN THIS FILE:
 #     python backend.py
 #
-# 📌 WHAT THIS FILE DOES (like Colab cells, but in functions):
+#  WHAT THIS FILE DOES (like Colab cells, but in functions):
 #
 #   SECTION 1 → Import libraries
 #   SECTION 2 → Download dataset from Kaggle
@@ -17,15 +17,12 @@
 #   SECTION 8 → Evaluate (accuracy, confusion matrix, report)
 #   SECTION 9 → Plot functions (charts for the frontend)
 #   SECTION 10→ Self-test  (runs when you do: python backend.py)
-#
-# ============================================================
 
 
-# ============================================================
 # SECTION 1 — Import Libraries
-# ============================================================
+
 # Same imports you used in your Colab notebooks!
-# ============================================================
+
 
 import os                          # For working with files & folders
 import glob                        # For searching files with a pattern
@@ -68,9 +65,9 @@ MODEL_DIR = BASE_DIR / "models"
 MODEL_PATH = MODEL_DIR / "diabetes_model.joblib"
 
 
-# ============================================================
+
 # SECTION 2 — Download the Dataset from Kaggle
-# ============================================================
+
 #
 # In Colab you pasted:
 #   import kagglehub
@@ -80,7 +77,7 @@ MODEL_PATH = MODEL_DIR / "diabetes_model.joblib"
 # kagglehub automatically reads your ~/.kaggle/kaggle.json key.
 # The file is downloaded ONCE and cached — next run is instant!
 #
-# ============================================================
+
 
 def download_dataset() -> str:
     """
@@ -100,14 +97,14 @@ def download_dataset() -> str:
         "iammustafatz/diabetes-prediction-dataset"
     )
 
-    print(f"✅ Dataset folder: {folder_path}")
+    print(f" Dataset folder: {folder_path}")
 
     # Inside the folder there is a CSV file — let's find it automatically
     csv_files = glob.glob(os.path.join(folder_path, "*.csv"))
 
     if not csv_files:
         raise FileNotFoundError(
-            f"❌ No CSV found in {folder_path}. "
+            f" No CSV found in {folder_path}. "
             "Try deleting the cache folder and re-running."
         )
 
@@ -147,15 +144,15 @@ def ensure_kaggle_credentials() -> None:
         os.chmod(kaggle_json_path, 0o600)
 
 
-# ============================================================
+
 # SECTION 3 — Load the CSV into a Pandas DataFrame
-# ============================================================
+
 #
 # In Colab:
 #   df = pd.read_csv("diabetes_prediction_dataset.csv")
 #   df.head()
 #
-# ============================================================
+
 
 def load_data(csv_path: str) -> pd.DataFrame:
     """
@@ -169,13 +166,13 @@ def load_data(csv_path: str) -> pd.DataFrame:
     """
 
     df = pd.read_csv(csv_path)
-    print(f"\n📊 Data loaded!  Shape: {df.shape[0]} rows × {df.shape[1]} columns")
+    print(f"\n Data loaded!  Shape: {df.shape[0]} rows × {df.shape[1]} columns")
     return df
 
 
-# ============================================================
+
 # SECTION 4 — Explore the Data
-# ============================================================
+
 #
 # In Colab:
 #   print(df.dtypes)
@@ -183,7 +180,7 @@ def load_data(csv_path: str) -> pd.DataFrame:
 #   print(df.isnull().sum())
 #   print(df['diabetes'].value_counts())
 #
-# ============================================================
+
 
 def get_data_summary(df: pd.DataFrame) -> dict:
     """
@@ -218,9 +215,9 @@ def get_data_summary(df: pd.DataFrame) -> dict:
     return summary
 
 
-# ============================================================
+
 # SECTION 5 — Clean & Preprocess the Data
-# ============================================================
+
 #
 # Raw data has text columns (gender, smoking_history).
 # Machine Learning models need NUMBERS — so we convert text → numbers.
@@ -232,7 +229,7 @@ def get_data_summary(df: pd.DataFrame) -> dict:
 #
 # We also remove the rare "Other" gender value (only a few rows).
 #
-# ============================================================
+
 
 # These are the column names the model will use as input features.
 # We store them here so both backend and frontend can access them.
@@ -278,42 +275,42 @@ def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
 
     df_clean = df.copy()            # Never modify the original!
 
-    # ── Step 1: Drop exact duplicate rows ────────────────────
+    #  Step 1: Drop exact duplicate rows 
     before = len(df_clean)
     df_clean = df_clean.drop_duplicates()
     dropped  = before - len(df_clean)
     if dropped > 0:
-        print(f"   🗑️  Removed {dropped} duplicate rows")
+        print(f"     Removed {dropped} duplicate rows")
 
-    # ── Step 2: Remove "Other" gender rows ───────────────────
+    # Step 2: Remove "Other" gender rows 
     df_clean = df_clean[df_clean["gender"] != "Other"]
 
-    # ── Step 3: Encode gender (text → number) ────────────────
+    #  Step 3: Encode gender (text → number) 
     df_clean["gender_encoded"] = df_clean["gender"].map(GENDER_MAPPING)
 
-    # ── Step 4: Encode smoking history (text → number) ───────
+    #  Step 4: Encode smoking history (text → number) 
     df_clean["smoking_encoded"] = df_clean["smoking_history"].map(SMOKING_MAPPING)
 
-    # ── Step 5: Drop rows where encoding produced NaN ─────────
+    #  Step 5: Drop rows where encoding produced NaN 
     df_clean = df_clean.dropna(
         subset=["gender_encoded", "smoking_encoded"]
     )
 
-    print(f"   ✅ After cleaning: {len(df_clean)} rows remain")
+    print(f"    After cleaning: {len(df_clean)} rows remain")
 
     return df_clean
 
 
-# ============================================================
+
 # SECTION 6 — Split into Train & Test Sets
-# ============================================================
+
 #
 # In Colab:
 #   X = df[feature_columns]
 #   y = df['diabetes']
 #   X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 #
-# ============================================================
+
 
 def split_data(df_clean: pd.DataFrame, test_size_pct: int, random_state: int):
     """
@@ -343,16 +340,15 @@ def split_data(df_clean: pd.DataFrame, test_size_pct: int, random_state: int):
     return X_train, X_test, y_train, y_test
 
 
-# ============================================================
+
 # SECTION 7 — Train the Random Forest Model
-# ============================================================
+
 #
 # In Colab:
 #   from sklearn.ensemble import RandomForestClassifier
 #   model = RandomForestClassifier(n_estimators=100, max_depth=10)
 #   model.fit(X_train, y_train)
-#
-# ============================================================
+
 
 def train_model(
     X_train,
@@ -376,7 +372,7 @@ def train_model(
         model — trained RandomForestClassifier (ready to predict!)
     """
 
-    print(f"\n🌲 Training Random Forest  "
+    print(f"\n Training Random Forest  "
           f"({n_estimators} trees, max depth {max_depth})...")
 
     model = RandomForestClassifier(
@@ -389,7 +385,7 @@ def train_model(
 
     model.fit(X_train, y_train)    # ← LEARNING happens here!
 
-    print("✅ Training complete!")
+    print(" Training complete!")
     return model
 
 
@@ -398,7 +394,7 @@ def save_model(model, model_path: Path = MODEL_PATH) -> Path:
 
     model_path.parent.mkdir(parents=True, exist_ok=True)
     joblib.dump(model, model_path)
-    print(f"💾 Model saved to: {model_path}")
+    print(f" Model saved to: {model_path}")
     return model_path
 
 
@@ -443,17 +439,15 @@ def train_and_save_model(
     return model, results
 
 
-# ============================================================
+
 # SECTION 8 — Evaluate the Model
-# ============================================================
-#
+
 # In Colab:
 #   y_pred = model.predict(X_test)
 #   print(accuracy_score(y_test, y_pred))
 #   print(confusion_matrix(y_test, y_pred))
 #   print(classification_report(y_test, y_pred))
-#
-# ============================================================
+# We also calculate the ROC-AUC score and curve, 
 
 def evaluate_model(model, X_train, X_test, y_train, y_test) -> dict:
     """
@@ -462,26 +456,26 @@ def evaluate_model(model, X_train, X_test, y_train, y_test) -> dict:
     Returns a dict with everything the frontend needs to display results.
     """
 
-    # ── Predictions ──────────────────────────────────────────
+    #  Predictions 
     y_pred       = model.predict(X_test)
     y_pred_train = model.predict(X_train)
     y_prob       = model.predict_proba(X_test)[:, 1]   # Probability of class 1
 
-    # ── Accuracy ─────────────────────────────────────────────
+    #  Accuracy 
     test_acc  = accuracy_score(y_test,  y_pred)       * 100
     train_acc = accuracy_score(y_train, y_pred_train) * 100
     gap       = train_acc - test_acc
 
-    # ── ROC-AUC score (a better metric for imbalanced datasets) ─
+    # ROC-AUC score (a better metric for imbalanced datasets) 
     auc_score = roc_auc_score(y_test, y_prob) * 100
 
-    # ── Confusion Matrix ─────────────────────────────────────
+    #  Confusion Matrix 
     cm = confusion_matrix(y_test, y_pred)
 
     # True Negatives, False Positives, False Negatives, True Positives
     tn, fp, fn, tp = cm.ravel()
 
-    # ── Classification Report as DataFrame ───────────────────
+    #  Classification Report as DataFrame 
     report_dict = classification_report(
         y_test, y_pred,
         target_names = ["No Diabetes (0)", "Diabetes (1)"],
@@ -489,17 +483,17 @@ def evaluate_model(model, X_train, X_test, y_train, y_test) -> dict:
     )
     report_df = pd.DataFrame(report_dict).transpose().round(3)
 
-    # ── ROC Curve data ────────────────────────────────────────
+    #  ROC Curve data 
     fpr, tpr, _ = roc_curve(y_test, y_prob)
 
-    # ── Sample predictions (first 20 rows) ───────────────────
-    labels = ["✅ No Diabetes", "🚨 Diabetes"]
+    #  Sample predictions (first 20 rows) 
+    labels = ["No Diabetes", " Diabetes"]
     sample_df = pd.DataFrame({
         "Actual"       : [labels[i] for i in list(y_test)[:20]],
         "Predicted"    : [labels[i] for i in list(y_pred)[:20]],
         "Confidence %" : [round(p * 100, 1) for p in list(y_prob)[:20]],
         "Correct?"     : [
-            "✅ Yes" if a == p else "❌ No"
+            " Yes" if a == p else "❌ No"
             for a, p in zip(list(y_test)[:20], list(y_pred)[:20])
         ],
     })
@@ -528,14 +522,12 @@ def evaluate_model(model, X_train, X_test, y_train, y_test) -> dict:
     }
 
 
-# ============================================================
-# SECTION 9 — Chart / Plot Functions
-# ============================================================
+
+# SECTION 9 — Chart / Plot Function
 # Each function draws ONE chart and returns a matplotlib Figure.
 # The frontend (app.py) calls these and displays them with st.pyplot()
-# ============================================================
 
-# ── 9a: Class Distribution ──────────────────────────────────
+# 9a: Class Distribution 
 def plot_class_distribution(df: pd.DataFrame):
     """Bar chart — how many diabetic vs non-diabetic patients."""
 
@@ -562,7 +554,7 @@ def plot_class_distribution(df: pd.DataFrame):
     return fig
 
 
-# ── 9b: Correlation Heatmap ──────────────────────────────────
+#  9b: Correlation Heatmap 
 def plot_correlation_heatmap(df_clean: pd.DataFrame):
     """Heatmap showing how strongly each feature correlates with diabetes."""
 
@@ -587,7 +579,7 @@ def plot_correlation_heatmap(df_clean: pd.DataFrame):
     return fig
 
 
-# ── 9c: Confusion Matrix ─────────────────────────────────────
+#  9c: Confusion Matrix 
 def plot_confusion_matrix(cm):
     """Heatmap of the confusion matrix — right vs wrong predictions."""
 
@@ -613,7 +605,7 @@ def plot_confusion_matrix(cm):
     return fig
 
 
-# ── 9d: Feature Importance ───────────────────────────────────
+#  9d: Feature Importance 
 def plot_feature_importance(model):
     """Horizontal bar chart of feature importances from the forest."""
 
@@ -648,7 +640,7 @@ def plot_feature_importance(model):
     return fig, top_feature, top_score
 
 
-# ── 9e: ROC Curve ────────────────────────────────────────────
+#  9e: ROC Curve
 def plot_roc_curve(fpr, tpr, auc_score: float):
     """
     ROC (Receiver Operating Characteristic) Curve.
@@ -673,7 +665,7 @@ def plot_roc_curve(fpr, tpr, auc_score: float):
     return fig
 
 
-# ── 9f: Age vs BMI coloured by Diabetes ──────────────────────
+#  9f: Age vs BMI coloured by Diabetes 
 def plot_age_bmi_scatter(df_clean: pd.DataFrame, sample_n: int = 2000):
     """
     Scatter plot of Age vs BMI, coloured by whether the patient has diabetes.
@@ -703,7 +695,7 @@ def plot_age_bmi_scatter(df_clean: pd.DataFrame, sample_n: int = 2000):
     return fig
 
 
-# ── 9g: One Decision Tree ────────────────────────────────────
+#  9g: One Decision Tree 
 def plot_single_tree(model):
     """Show the first tree in the forest (depth capped at 3)."""
 
@@ -725,30 +717,27 @@ def plot_single_tree(model):
     return fig
 
 
-# ============================================================
 # SECTION 10 — Self-Test  (runs ONLY when you do: python backend.py)
-# ============================================================
 # This is like running ALL your Colab cells one by one.
-# Great for testing that everything works before running the UI!
-# ============================================================
+# Great for testing that everything works before running the UI!        
 
 if __name__ == "__main__":
 
     print()
     print("=" * 60)
-    print("  🧪  backend.py  —  Full Pipeline Self-Test")
+    print("  backend.py  —  Full Pipeline Self-Test")
     print("=" * 60)
 
-    # ── Step 1: Download ────────────────────────────────────
+    # Step 1: Download 
     print("\n[STEP 1]  Download dataset from Kaggle")
     csv_path = download_dataset()
 
-    # ── Step 2: Load ────────────────────────────────────────
+    #  Step 2: Load 
     print("\n[STEP 2]  Load CSV into DataFrame")
     df = load_data(csv_path)
     print(df.head())
 
-    # ── Step 3: Summary ─────────────────────────────────────
+    #  Step 3: Summary 
     print("\n[STEP 3]  Data Summary")
     summary = get_data_summary(df)
     print(f"   Rows        : {summary['total_rows']:,}")
@@ -759,20 +748,20 @@ if __name__ == "__main__":
           f"({summary['class_balance']['Non-Diabetic %']}%)")
     print(f"   Missing vals: {sum(summary['null_counts'].values())}")
 
-    # ── Step 4: Preprocess ──────────────────────────────────
+    #  Step 4: Preprocess 
     print("\n[STEP 4]  Preprocess (encode categories, remove duplicates)")
     df_clean = preprocess_data(df)
 
-    # ── Step 5: Split ───────────────────────────────────────
+    # Step 5: Split 
     print("\n[STEP 5]  Train/Test Split  (80% train, 20% test)")
     X_train, X_test, y_train, y_test = split_data(df_clean, 20, 42)
 
-    # ── Step 6: Train ───────────────────────────────────────
+    #  Step 6: Train
     print("\n[STEP 6]  Train Random Forest")
     model = train_model(X_train, y_train, n_estimators=100, max_depth=10)
     save_model(model)
 
-    # ── Step 7: Evaluate ────────────────────────────────────
+    #  Step 7: Evaluate 
     print("\n[STEP 7]  Evaluate")
     results = evaluate_model(model, X_train, X_test, y_train, y_test)
 
@@ -786,14 +775,14 @@ if __name__ == "__main__":
     print(f"   False Negatives (Said NO,  was YES) : {results['false_negatives']:,}")
     print(f"   True Positives  (Correctly said YES): {results['true_positives']:,}")
 
-    # ── Step 8: Feature Importance ──────────────────────────
+    # Step 8: Feature Importance 
     print("\n[STEP 8]  Feature Importance")
     _, top_feat, top_score = plot_feature_importance(model)
     print(f"   Most important feature: '{top_feat}'  (score = {top_score})")
 
     print()
     print("=" * 60)
-    print("  ✅  ALL STEPS PASSED — backend.py works correctly!")
-    print("  👉  Now run:  streamlit run app.py")
+    print("  ALL STEPS PASSED — backend.py works correctly!")
+    print("   Now run:  streamlit run app.py")
     print("=" * 60)
     print()
